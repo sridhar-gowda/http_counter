@@ -1,0 +1,7 @@
+service_port: 8083
+service_host: "127.0.0.1"
+db_file: "./file.json"
+main_window: 60
+count_URL: "/count"
+limit_window: 20
+limit_size: 15

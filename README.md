@@ -1,4 +1,4 @@
-A IP Based Rate Limiter using sliding window approach.
+An IP Based Rate Limiter using sliding window approach.
 
 config.yaml contains configuration data.
 

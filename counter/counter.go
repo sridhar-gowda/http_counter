@@ -10,7 +10,6 @@ import (
 	"time"
 )
 
-
 type HitCounter struct {
 	Visitors map[string][]int64
 	Mu       sync.RWMutex
@@ -20,7 +19,7 @@ type HitCounter struct {
 
 func NewCounter(config *config.Config, limiter *Limiter) *HitCounter {
 	v := make(map[string][]int64)
-	return &HitCounter{Visitors: v,Cfg: config, Limiter: limiter}
+	return &HitCounter{Visitors: v, Cfg: config, Limiter: limiter}
 
 }
 
@@ -34,8 +33,8 @@ func (c *HitCounter) Initialize(r io.Reader) error {
 }
 
 func (c *HitCounter) Save(w io.Writer) error {
-    c.Mu.Lock()
-    defer c.Mu.Unlock()
+	c.Mu.Lock()
+	defer c.Mu.Unlock()
 	if len(c.Visitors) > 0 {
 		dbStore := model.ToDbStore(c.Visitors)
 		err := json.NewEncoder(w).Encode(dbStore)
@@ -46,7 +45,7 @@ func (c *HitCounter) Save(w io.Writer) error {
 	return nil
 }
 
-func (c *HitCounter) CheckRequest(ip string)  {
+func (c *HitCounter) CheckRequest(ip string) {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
 	now := time.Now().Unix()
@@ -64,7 +63,6 @@ func (c *HitCounter) CheckRequest(ip string)  {
 	}
 	c.updateCount(now, ip, data)
 }
-
 
 func (c *HitCounter) updateCount(now int64, ip string, timeStamps []int64) int {
 	var total int
@@ -95,15 +93,14 @@ func (c *HitCounter) CheckLimit(ip string) {
 	var windowCount int
 	for i := len(timeStamps) - 1; i >= 0; i-- {
 		if timeStamps[i] > window {
-			windowCount +=1
-		} else{
+			windowCount += 1
+		} else {
 			break
 		}
 	}
 	if windowCount > c.Limiter.Size {
 		c.Limiter.Allowed = false
-	}else{
+	} else {
 		c.Limiter.Allowed = true
 	}
 }
-

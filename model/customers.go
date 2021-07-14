@@ -37,10 +37,9 @@ func ToDbStore(customers map[string][]int64) DbStore {
 func ToCustomers(dbStore *DbStore) map[string][]int64 {
 
 	customers := make(map[string][]int64)
-	for _,dbEntity := range dbStore.List {
+	for _, dbEntity := range dbStore.List {
 		customers[dbEntity.CustomerIP] = dbEntity.TimeStamps
 	}
 
 	return customers
 }
-

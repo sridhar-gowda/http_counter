@@ -35,13 +35,13 @@ func createFile(fileName string) (*os.File, error) {
 }
 
 func GetLatestWindow(now int64, size int) int64 {
-	return now-int64(size)
+	return now - int64(size)
 }
 
-func GetCurrentTime()int64{
+func GetCurrentTime() int64 {
 	return time.Now().Unix()
 }
 
-func GetIpFromHeader( req *http.Request)string{
+func GetIpFromHeader(req *http.Request) string {
 	return req.Header.Get("dummy-ip")
 }

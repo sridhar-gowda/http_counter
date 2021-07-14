@@ -16,13 +16,11 @@ import (
 // Request store handler
 type RequestHandler struct {
 	counter *counter.HitCounter
-	cfg *config.Config
+	cfg     *config.Config
 }
 
 // Handles each request
 func (rh *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	rh.counter.CheckRequest(ip)
 	fmt.Println(rh.counter.Limiter.Allowed)
@@ -34,7 +32,7 @@ func (rh *RequestHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	res := &model.CountResponse{
-		Msg:   "REQUEST REGISTERED",
+		Msg: "REQUEST REGISTERED",
 	}
 	res.ToJSON(w)
 }
@@ -51,17 +49,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	limiter := counter.NewLimiter(cfgData.LimitSize,cfgData.LimitRate)
+	limiter := counter.NewLimiter(cfgData.LimitSize, cfgData.LimitRate)
 	dataFile := utils.GetFile(cfgData.DataFile)
-	c := counter.NewCounter(cfgData,limiter)
+
+	c := counter.NewCounter(cfgData, limiter)
 	c.Initialize(dataFile)
 
-	handler := &RequestHandler{counter: c,cfg: cfgData}
+	handler := &RequestHandler{counter: c, cfg: cfgData}
 	onExit(dataFile, handler)
 
 	mux := http.NewServeMux()
-    mux.Handle(cfgData.CountUrl,handler)
-
+	mux.Handle(cfgData.CountUrl, handler)
 
 	hostPort := fmt.Sprintf("%s:%d", cfgData.Host, cfgData.Port)
 	log.Printf("Listening on Port %d\n", cfgData.Port)

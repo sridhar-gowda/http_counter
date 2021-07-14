@@ -6,11 +6,10 @@ import (
 )
 
 type CountResponse struct {
-	Msg   string `json:"message"`
+	Msg string `json:"message"`
 }
 
 func (res *CountResponse) ToJSON(w io.Writer) error {
 	err := json.NewEncoder(w).Encode(res)
 	return err
 }
-
